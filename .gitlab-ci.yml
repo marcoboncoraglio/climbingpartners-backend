@@ -5,11 +5,13 @@ cache:
     - node_modules/
     
 build:
-    script:
+    before_script:
         - npm install
+    script:
         - npm run build
 
 test:
+  before_script:
+        - npm install
   script:
-    - npm install
     - node run test

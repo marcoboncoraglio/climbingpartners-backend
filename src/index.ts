@@ -12,7 +12,7 @@ import loadLoginConfig from './passport-config/userLoginConfig';
 loadLoginConfig(passport);
 
 // DATABASE
-mongoose.connect(process.env.DB_CONNECTION_LOCAL as string,
+mongoose.connect(process.env.DB_CONNECTION_TEST as string,
      { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.set('useCreateIndex', true);
