@@ -1,0 +1,17 @@
+image: node:latest
+
+services:
+  - mongodb:latest
+
+cache:
+  paths:
+    - node_modules/
+    
+build:
+    script:
+        - npm run build
+
+test:
+  script:
+    - npm install
+    - node run test
