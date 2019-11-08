@@ -14,7 +14,7 @@ router.get('/:id', getUserCard, (req: any, res: any) => {
 router.post('/', async (req, res) => {
   const userCard = new UserCard({
     name: req.body.name,
-    imgUrl: req.body.imgUrl
+    imgUrl: req.body.imgUrl,
   });
 
   try {

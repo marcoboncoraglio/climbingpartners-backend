@@ -2,7 +2,7 @@ import express from 'express';
 import Location from '../models/location';
 const router = express.Router();
 
-//TODO: allow getting locations withing a certain radius
+// TODO: allow getting locations withing a certain radius
 router.get('/', async (req: any, res: any) => {
   const locations = await Location.find();
   res.json(locations);
@@ -15,7 +15,7 @@ router.get('/:id', getLocation, (req: any, res: any) => {
 router.post('/', async (req: any, res: any) => {
   const location = new Location({
     lat: req.body.lat,
-    lng: req.body.lng
+    lng: req.body.lng,
   });
 
   try {
@@ -33,7 +33,7 @@ router.put('/:id', getLocation, async (req: any, res: any) => {
   try {
     const updatedLocation = await res.location.save();
     res.json(updatedLocation);
-  } catch(err){
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -50,7 +50,7 @@ router.patch('/:id', getLocation, async (req: any, res: any) => {
   try {
     const updatedLocation = await res.location.save();
     res.json(updatedLocation);
-  } catch (err){
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -70,10 +70,10 @@ async function getLocation(req: any, res: any, next: any) {
     if (location == null) {
       return res.status(404).json({ message: 'Cant find location' });
     }
-    
+
     res.location = location;
     next();
-    
+
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

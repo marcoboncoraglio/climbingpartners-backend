@@ -1,8 +1,8 @@
 import mongoose, {Schema, Document} from 'mongoose';
 
 export interface IFriendLists extends Document {
-    friendList: [String];
-    friendRequests: [String];
+    friendList: [string];
+    friendRequests: [string];
   }
 
 const friendListsSchema: Schema = new Schema({
@@ -12,11 +12,11 @@ const friendListsSchema: Schema = new Schema({
     },
     friendList: {
         type: [String],
-        required: true
+        required: true,
     },
     friendRequests: {
         type: [String],
-        required: true
+        required: true,
     }
 });
 

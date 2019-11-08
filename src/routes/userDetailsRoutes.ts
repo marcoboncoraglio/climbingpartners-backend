@@ -16,7 +16,7 @@ router.post('/', async (req: any, res: any) => {
     about: req.body.about,
     availableEquipment: req.body.availableEquipment,
     climbingStyles: req.body.climbingStyles,
-    languagesSpoken: req.body.languagesSpoken
+    languagesSpoken: req.body.languagesSpoken,
   });
 
   try {
@@ -36,7 +36,7 @@ router.put('/:id', getUserDetails, async (req: any, res: any) => {
   try {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
-  } catch(err){
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -61,7 +61,7 @@ router.patch('/:id', getUserDetails, async (req: any, res: any) => {
   try {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
-  } catch(err) {
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -84,7 +84,7 @@ async function getUserDetails(req: any, res: any, next: any) {
 
     res.userDetails = userDetails;
     next();
-    
+
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

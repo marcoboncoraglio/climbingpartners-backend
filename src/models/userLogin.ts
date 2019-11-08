@@ -3,19 +3,20 @@ import passportLocalMongoose from 'passport-local-mongoose';
 
 
 export interface IUserLoginInterface extends Document {
-    username: String;
+    username: string;
 }
 
 const userLoginSchema: Schema = new Schema({
     _id: {
         type: mongoose.Types.ObjectId,
-        default: new mongoose.Types.ObjectId()
+        default: new mongoose.Types.ObjectId(),
     },
     username: {
-        type: String
-    }
+        type: String,
+    },
 });
 
 userLoginSchema.plugin(passportLocalMongoose);
 
-export default mongoose.model<IUserLoginInterface>('userLogin', userLoginSchema as PassportLocalSchema);
+export default mongoose.model<IUserLoginInterface>('userLogin',
+userLoginSchema as PassportLocalSchema);
