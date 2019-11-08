@@ -16,8 +16,8 @@ function loadLocalLoginConfig(passport: any) {
 /*
 function loadGoogleLoginConfig(passport:any ){
     passport.use(new GoogleStrategy({
-        clientID: process.env.REACT_APP_GOOGLE_AUTH_ID,
-        clientSecret: process.env.REACT_APP_GOOGLE_AUTH_SECRET,
+        clientID: process.env.GOOGLE_AUTH_ID,
+        clientSecret: process.env.GOOGLE_AUTH_SECRET,
         callbackURL: "http://www.example.com/auth/google/callback"
       },
       function(accessToken: any, refreshToken: any, profile: any, done: any) {

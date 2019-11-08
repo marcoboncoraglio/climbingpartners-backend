@@ -8,7 +8,8 @@
     "lint": "tsc --noEmit && tslint \"**/*.{ts}\" --fix",
     "test": "jest --forceExit --verbose",
     "test-coverage": "jest --forceExit --coverage --verbose",
-    "build": "tsc && npm run lint"
+    "build": "tsc && npm run lint",
+    "build-deploy": "tsc && npm run lint && npm run test-coverage"
   },
   "author": "",
   "license": "ISC",
