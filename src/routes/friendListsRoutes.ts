@@ -32,7 +32,7 @@ router.put('/:id', getFriendLists, async (req: any, res: any) => {
   try {
     const updatedFriendLists = await res.friendLists.save();
     res.json(updatedFriendLists);
-  } catch(err){
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -49,7 +49,7 @@ router.patch('/:id', getFriendLists, async (req: any, res: any) => {
   try {
     const updatedFriendList = await res.friendLists.save();
     res.json(updatedFriendList);
-  } catch (err){
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
@@ -57,7 +57,7 @@ router.patch('/:id', getFriendLists, async (req: any, res: any) => {
 router.delete('/:id', getFriendLists, async (req: any, res: any) => {
   try {
     await res.friendLists.remove();
-    res.json({ message: 'Deleted friendLists' });
+    res.json({ message: 'Deleted friendList' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

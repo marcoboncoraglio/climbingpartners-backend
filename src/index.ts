@@ -38,10 +38,5 @@ app.use('/api/friendLists', friendListsRouter);
 import authRouter from './routes/authRoutes';
 app.use('/api/auth', authRouter);
 
-app.listen(process.env.PORT || 3000, () => {
-// tslint:disable-next-line: no-console
-    console.log(
-        `Climbing partners is running: http://localhost:${process.env.PORT || 3000}`,
-    );
-});
+export default app;
 
