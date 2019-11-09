@@ -1,4 +1,4 @@
-import app from '../src/index'; // Link to your server file
+import app from '../src/index';
 import supertest from 'supertest';
 
 describe('Testing locations API', () => {
