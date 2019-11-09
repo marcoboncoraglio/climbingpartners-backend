@@ -3,7 +3,6 @@ import passport from 'passport';
 import UserLogin from '../models/userLogin';
 const router = express.Router();
 
-// TODO: check generation of session here and in index.html
 router.post('/register', (req: any, res: any, next: any) => {
     UserLogin.register(new UserLogin({ username: req.body.username }),
     req.body.password, (err, account) => {
@@ -12,12 +11,15 @@ router.post('/register', (req: any, res: any, next: any) => {
         }
 
         passport.authenticate('local')(req, res, () => {
+
             req.session.save((err: any) => {
                 if (err) {
                     return next(err);
                 }
-                res.json({ user: account });
+
+                res.status(201).json({ id: account._id });
             });
+
         });
     });
 });
@@ -25,18 +27,20 @@ router.post('/register', (req: any, res: any, next: any) => {
 router.post('/login', (req: any, res: any, next: any) => {
     passport.authenticate('local', (hashErr, user, info) => {
         if (hashErr) {
-            return res.json({ message: hashErr });
+            return res.status(403).json({ message: hashErr });
         }
         if (!user) {
-            return res.json({ message: info.message });
+            return res.status(403).json({ message: info.message });
         }
 
         req.session.save((err: any) => {
             if (err) {
                 return next(err);
             }
-            res.json({ user });
+
+            res.status(200).json({ id: user.id });
         });
+
     })(req, res, next);
 });
 
@@ -51,14 +55,17 @@ router.get('/google/callback',
     });
 */
 
-router.get('/logout', (req: any, res: any, next: any) => {
-    req.logout();
-    req.session.save((err: any) => {
+router.post('/logout', (req: any, res: any, next: any) => {
+
+    req.session.destroy((err: any) => {
         if (err) {
             return next(err);
         }
-        res.status(200);
     });
+
+    req.logout();
+
+    res.status(200).send('Logged out');
 });
 
 export default router;

@@ -1,5 +1,4 @@
-import UserLogin, {IUserLoginInterface} from '../models/userLogin';
-require('dotenv/config');
+import UserLogin from '../models/userLogin';
 // const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 export default function localLoginConfig(passport: any) {

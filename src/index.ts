@@ -1,7 +1,26 @@
 import express from 'express';
 import passport from 'passport';
 import mongoose from 'mongoose';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import crypto from 'crypto';
+
+dotenv.config();
+const IN_PROD = process.env.NODE_ENV === 'production';
+
 const app = express();
+app.disable('x-powered-by');
+
+app.use(session({
+     secret: crypto.randomBytes(20).toString('hex'),
+     resave: false,
+     saveUninitialized: false,
+     cookie: {
+          maxAge: 1000 * 60 * 60 * 2,   // 2 hours
+          sameSite: true,
+          secure: IN_PROD,
+     },
+}));
 
 app.use(express.json());
 app.use(passport.initialize());
@@ -12,7 +31,9 @@ import loadLoginConfig from './passport-config/userLoginConfig';
 loadLoginConfig(passport);
 
 // DATABASE
-mongoose.connect(process.env.DB_CONNECTION_TEST as string,
+const DB_CONNECTION = IN_PROD ? process.env.DB_CONNECTION_PRODUCTION
+                         : process.env.DB_CONNECTION_TEST;
+mongoose.connect(DB_CONNECTION as string,
      { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.set('useCreateIndex', true);
