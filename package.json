@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon --config \"./nodemon.json\"/",
     "lint": "tsc --noEmit && tslint \"**/*.{ts}\" --fix",
-    "test": "jest --forceExit --verbose",
-    "test-coverage": "jest --forceExit --coverage --verbose",
+    "test": "jest --forceExit --verbose --detectOpenHandles",
+    "test-coverage": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "build": "tsc && npm run lint",
     "build-deploy": "tsc && npm run lint && npm run test-coverage"
   },
