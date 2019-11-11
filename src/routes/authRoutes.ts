@@ -5,39 +5,35 @@ const router = express.Router();
 
 router.post('/register', (req: any, res: any, next: any) => {
     UserLogin.register(new UserLogin({ username: req.body.username }),
-    req.body.password, (err, account) => {
-        if (err) {
-            return res.json({ error: err.message });
-        }
+        req.body.password, (err, account) => {
+            if (err) {
+                return res.json({ error: err.message });
+            }
 
-        passport.authenticate('local')(req, res, () => {
+            passport.authenticate('local')(req, res, () => {
 
-            req.session.save((err: any) => {
-                if (err) {
-                    return next(err);
-                }
+                req.session.save((err: any) => {
+                    if (err) {
+                        return next(err);
+                    }
 
-                res.status(201).json({ id: account._id });
+                    res.status(201).json({ id: account._id });
+                });
+
             });
-
         });
-    });
 });
 
 router.post('/login', (req: any, res: any, next: any) => {
     passport.authenticate('local', (hashErr, user, info) => {
         if (hashErr) {
-            return res.status(403).json({ message: hashErr });
+            return res.status(401).json({ message: hashErr });
         }
         if (!user) {
-            return res.status(403).json({ message: info.message });
+            return res.status(401).json({ message: info.message });
         }
-
-        req.session.save((err: any) => {
-            if (err) {
-                return next(err);
-            }
-
+        req.login(user, (err: any) => {
+            if (err) { return next(err); }
             res.status(200).json({ id: user.id });
         });
 

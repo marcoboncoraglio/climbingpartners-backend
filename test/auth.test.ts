@@ -45,12 +45,12 @@ describe('Testing authentication API: local strategy', () => {
         supertest(app)
             .post('/api/auth/login')
             .send({
-                username: 'marco1',
+                username: 'marcoasdfsadf',
                 password: 'hi',
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
-            .expect(403)
+            .expect(401)
             .end((err, res) => {
                 if (err) { throw err; }
                 expect(res.body.message)

@@ -1,9 +1,42 @@
 import app from '../src/index';
 import supertest from 'supertest';
 
+let id: string;
+const contentType: string = 'application/json; charset=utf-8';
+let cookie: any;
+
 describe('Testing friendList API', () => {
-    let id: string;
-    const contentType: string = 'application/json; charset=utf-8';
+
+    beforeAll((done) => {
+        supertest(app)
+            .post('/api/auth/login')
+            .send({
+                username: 'marco1',
+                password: 'hi',
+            })
+            .set('Content-Type', contentType)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end((err: any, res: any) => {
+                if (err) { throw err; }
+                id = res.body.id;
+                cookie = res.headers['set-cookie'];
+                done();
+            });
+    });
+
+    afterAll((done) => {
+        supertest(app)
+            .post('/api/auth/logout')
+            .set('Content-Type', contentType)
+            .set('Accept', 'application/json')
+            .set('cookie', cookie)
+            .expect(200)
+            .end((err: any, res: any) => {
+                if (err) { throw err; }
+                done();
+            });
+    });
 
     it('Post friendList', (done) => {
         supertest(app)
@@ -14,8 +47,9 @@ describe('Testing friendList API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(201)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) { throw err; }
                 id = res.body._id;
                 done();
@@ -26,8 +60,9 @@ describe('Testing friendList API', () => {
         supertest(app)
             .get(`/api/friendLists/${id}`)
             .expect('Content-Type', contentType)
+            .set('cookie', cookie)
             .expect(200)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) { throw err; }
                 expect(res.body._id).toEqual(id);
                 done();
@@ -48,8 +83,9 @@ describe('Testing friendList API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) { throw err; }
                 expect(res.body.friendList)
                     .toEqual(newFriendsLists.friendList.map(String));
@@ -69,8 +105,9 @@ describe('Testing friendList API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) { throw err; }
                 expect(res.body.friendList)
                     .toEqual(newFriendList.map(String));
@@ -83,8 +120,9 @@ describe('Testing friendList API', () => {
             .delete(`/api/friendLists/${id}`)
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
-            .end((err, res) => {
+            .end((err: any, res: any) => {
                 if (err) { throw err; }
                 expect(res.body.message).toBe('Deleted friendList');
                 done();

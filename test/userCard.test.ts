@@ -4,6 +4,38 @@ import supertest from 'supertest';
 describe('Testing userCards API', () => {
     let id: string;
     const contentType: string = 'application/json; charset=utf-8';
+    let cookie: any;
+
+    beforeAll((done) => {
+        supertest(app)
+            .post('/api/auth/login')
+            .send({
+                username: 'marco1',
+                password: 'hi',
+            })
+            .set('Content-Type', contentType)
+            .set('Accept', 'application/json')
+            .expect(200)
+            .end((err: any, res: any) => {
+                if (err) { throw err; }
+                id = res.body.id;
+                cookie = res.headers['set-cookie'];
+                done();
+            });
+    });
+
+    afterAll((done) => {
+        supertest(app)
+            .post('/api/auth/logout')
+            .set('Content-Type', contentType)
+            .set('Accept', 'application/json')
+            .set('cookie', cookie)
+            .expect(200)
+            .end((err: any, res: any) => {
+                if (err) { throw err; }
+                done();
+            });
+    });
 
     it('Post userCard', (done) => {
         supertest(app)
@@ -13,6 +45,7 @@ describe('Testing userCards API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(201)
             .end((err, res) => {
                 if (err) { throw err; }
@@ -25,6 +58,7 @@ describe('Testing userCards API', () => {
         supertest(app)
             .get(`/api/userCards/${id}`)
             .expect('Content-Type', contentType)
+            .set('cookie', cookie)
             .expect(200)
             .end((err, res) => {
                 if (err) { throw err; }
@@ -47,6 +81,7 @@ describe('Testing userCards API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
             .end((err, res) => {
                 if (err) { throw err; }
@@ -68,6 +103,7 @@ describe('Testing userCards API', () => {
             })
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
             .end((err, res) => {
                 if (err) { throw err; }
@@ -82,6 +118,7 @@ describe('Testing userCards API', () => {
             .delete(`/api/userCards/${id}`)
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
+            .set('cookie', cookie)
             .expect(200)
             .end((err, res) => {
                 if (err) { throw err; }

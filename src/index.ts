@@ -7,9 +7,12 @@ import crypto from 'crypto';
 
 dotenv.config();
 const IN_PROD = process.env.NODE_ENV === 'production';
+const PROTECT_ROUTES = true;
 
 const app = express();
 app.disable('x-powered-by');
+
+app.use(express.json());
 
 app.use(session({
      secret: crypto.randomBytes(20).toString('hex'),
@@ -22,7 +25,6 @@ app.use(session({
      },
 }));
 
-app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -32,7 +34,7 @@ loadLoginConfig(passport);
 
 // DATABASE
 const DB_CONNECTION = IN_PROD ? process.env.DB_CONNECTION_PRODUCTION
-                         : process.env.DB_CONNECTION_TEST;
+     : process.env.DB_CONNECTION_TEST;
 mongoose.connect(DB_CONNECTION as string,
      { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -44,6 +46,24 @@ db.on('error', (error: any) => console.error(error));
 db.once('open', () => console.log('connected to database'));
 
 // ROUTES
+import authRouter from './routes/authRoutes';
+app.use('/api/auth', authRouter);
+
+function ensureAuthenticated(req: any, res: any, next: any) {
+     if (req.isAuthenticated()) { return next(); }
+     res.status(401).send({ message: 'Not authenticated' });
+}
+
+if (PROTECT_ROUTES || IN_PROD) {
+     app.all('*', (req, res, next) => {
+          if (req.path === '/api/auth/login' || req.path === '/api/auth/register') {
+               next();
+          } else {
+               ensureAuthenticated(req, res, next);
+          }
+     });
+}
+
 import userCardRouter from './routes/userCardRoutes';
 app.use('/api/userCards', userCardRouter);
 
@@ -55,9 +75,6 @@ app.use('/api/locations', locationsRouter);
 
 import friendListsRouter from './routes/friendListsRoutes';
 app.use('/api/friendLists', friendListsRouter);
-
-import authRouter from './routes/authRoutes';
-app.use('/api/auth', authRouter);
 
 export default app;
 
