@@ -11,6 +11,14 @@ router.get('/:id', getFriendLists, (req: any, res: any) => {
   res.json(res.friendLists);
 });
 
+router.get('/:id/friends', getFriendLists, (req: any, res: any) => {
+  res.json(res.friendLists.friendList);
+});
+
+router.get('/:id/requests', getFriendLists, (req: any, res: any) => {
+  res.json(res.friendLists.friendRequests);
+});
+
 router.post('/', async (req: any, res: any) => {
   const friendLists = new FriendLists({
     friendList: req.body.friendList,
