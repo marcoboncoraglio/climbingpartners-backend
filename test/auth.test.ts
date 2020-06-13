@@ -10,7 +10,7 @@ describe('Testing authentication API: local strategy', () => {
         supertest(app)
             .post('/api/auth/register')
             .send({
-                username: 'marco',
+                username: 'testobject1234',
                 password: 'hi',
             })
             .set('Content-Type', contentType)
@@ -27,7 +27,7 @@ describe('Testing authentication API: local strategy', () => {
         supertest(app)
             .post('/api/auth/login')
             .send({
-                username: 'marco',
+                username: 'testobject1234',
                 password: 'hi',
             })
             .set('Content-Type', contentType)
