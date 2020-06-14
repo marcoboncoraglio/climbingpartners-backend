@@ -1,8 +1,10 @@
 import app from './index';
 
-app.listen(process.env.PORT || 4000, () => {
+export const PORT: number = 4000;
+
+app.listen(process.env.PORT || PORT, () => {
     // tslint:disable-next-line: no-console
     console.log(
-        `Climbing partners is running: http://localhost:${process.env.PORT || 3000}`,
+        `Climbing partners is running: http://localhost:${process.env.PORT || PORT}`,
     );
 });
