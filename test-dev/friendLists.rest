@@ -1,16 +1,16 @@
-GET http://localhost:3000/api/friendLists/
+GET http://localhost:4000/api/friendLists/
 
 ###
 
-GET http://localhost:3000/api/friendLists/123412341234
+GET http://localhost:4000/api/friendLists/123412341234
 
 ###
 
-GET http://localhost:3000/api/friendLists/5d812aa136091e6a2229b31a
+GET http://localhost:4000/api/friendLists/5d812aa136091e6a2229b31a
 
 ###
 
-POST http://localhost:3000/api/friendLists
+POST http://localhost:4000/api/friendLists
 content-type: application/json
 
 {

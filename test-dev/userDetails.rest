@@ -1,16 +1,16 @@
-GET http://localhost:3000/api/userDetails/
+GET http://localhost:4000/api/userDetails/
 
 ###
 
-GET http://localhost:3000/api/userDetails/123412341234
+GET http://localhost:4000/api/userDetails/123412341234
 
 ###
 
-GET http://localhost:3000/api/userDetails/5d812369ec9d906279845aea
+GET http://localhost:4000/api/userDetails/5d812369ec9d906279845aea
 
 ###
 
-POST http://localhost:3000/api/userDetails
+POST http://localhost:4000/api/userDetails
 content-type: application/json
 
 {
