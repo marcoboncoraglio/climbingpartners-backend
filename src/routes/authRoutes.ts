@@ -40,7 +40,7 @@ router.post("/register", (req: any, res: any, next: any) => {
         await userCard.save();
         await userDetails.save();
       } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(400).json({ error: err.message });
       }
 
       passport.authenticate("local")(req, res, () => {
@@ -59,10 +59,10 @@ router.post("/register", (req: any, res: any, next: any) => {
 router.post("/login", (req: any, res: any, next: any) => {
   passport.authenticate("local", (hashErr, user, info) => {
     if (hashErr) {
-      return res.status(401).json({ message: hashErr });
+      return res.status(401).json({ error: hashErr });
     }
     if (!user) {
-      return res.status(401).json({ message: info.message });
+      return res.status(401).json({ error: info.message });
     }
     req.login(user, (err: any) => {
       if (err) {

@@ -59,7 +59,7 @@ describe("Testing authentication API: local strategy", () => {
         if (err) {
           throw err;
         }
-        expect(res.body.message).toEqual("Password or username is incorrect");
+        expect(res.body.error).toEqual("Password or username is incorrect");
         done();
       });
   });
