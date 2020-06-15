@@ -1,18 +1,19 @@
-import express from 'express';
-import UserCard from '../models/userCard';
+import express from "express";
+import UserCard from "../models/userCard";
 const router = express.Router();
 
-router.get('/', async (req: any, res: any) => {
+router.get("/", async (req: any, res: any) => {
   const userCards = await UserCard.find();
   res.status(200).json(userCards);
 });
 
-router.get('/:id', getUserCard, (req: any, res: any) => {
+router.get("/:id", getUserCard, (req: any, res: any) => {
   res.status(200).json(res.userCard);
 });
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const userCard = new UserCard({
+    id: req.body.id,
     name: req.body.name,
     imgUrl: req.body.imgUrl,
   });
@@ -25,7 +26,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', getUserCard, async (req: any, res: any) => {
+router.put("/:id", getUserCard, async (req: any, res: any) => {
   res.userCard.name = req.body.name;
   res.userCard.imgUrl = req.body.imgUrl;
 
@@ -37,7 +38,7 @@ router.put('/:id', getUserCard, async (req: any, res: any) => {
   }
 });
 
-router.patch('/:id', getUserCard, async (req: any, res: any) => {
+router.patch("/:id", getUserCard, async (req: any, res: any) => {
   if (req.body.name != null) {
     res.userCard.name = req.body.name;
   }
@@ -54,10 +55,10 @@ router.patch('/:id', getUserCard, async (req: any, res: any) => {
   }
 });
 
-router.delete('/:id', getUserCard, async (req: any, res: any) => {
+router.delete("/:id", getUserCard, async (req: any, res: any) => {
   try {
     await res.userCard.remove();
-    res.json({ message: 'Deleted User Card' });
+    res.json({ message: "Deleted User Card" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -65,14 +66,13 @@ router.delete('/:id', getUserCard, async (req: any, res: any) => {
 
 async function getUserCard(req: any, res: any, next: any) {
   try {
-    const userCard = await UserCard.findById(req.params.id);
+    const userCard = await UserCard.findOne({ id: req.params.id });
     if (userCard == null) {
-      return res.status(404).json({ message: 'Cant find user card' });
+      return res.status(404).json({ message: "Cant find user card" });
     }
 
     res.userCard = userCard;
     next();
-
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

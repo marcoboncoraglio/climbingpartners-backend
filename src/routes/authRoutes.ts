@@ -19,19 +19,19 @@ router.post("/register", (req: any, res: any, next: any) => {
       }
 
       const friendLists = new FriendLists({
-        _id: account._id,
+        id: account._id,
       });
 
       const userCard = new UserCard({
-        _id: account._id,
+        id: account._id,
       });
 
       const userDetails = new UserDetails({
-        _id: account._id,
+        id: account._id,
       });
 
       const location = new Location({
-        _id: account._id,
+        id: account._id,
       });
 
       try {

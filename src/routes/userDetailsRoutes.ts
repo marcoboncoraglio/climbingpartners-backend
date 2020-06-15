@@ -13,6 +13,7 @@ router.get('/:id', getUserDetails, (req: any, res: any) => {
 
 router.post('/', async (req: any, res: any) => {
   const userDetails = new UserDetails({
+    id: req.body.id,
     about: req.body.about,
     availableEquipment: req.body.availableEquipment,
     climbingStyles: req.body.climbingStyles,
@@ -77,7 +78,7 @@ router.delete('/:id', getUserDetails, async (req: any, res: any) => {
 
 async function getUserDetails(req: any, res: any, next: any) {
   try {
-    const userDetails = await UserDetails.findById(req.params.id);
+    const userDetails = await UserDetails.findOne({ id: req.params.id });
     if (userDetails == null) {
       return res.status(404).json({ message: 'Cant find user details' });
     }
