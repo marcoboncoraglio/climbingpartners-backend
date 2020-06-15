@@ -68,7 +68,7 @@ router.post("/login", (req: any, res: any, next: any) => {
       if (err) {
         return next(err);
       }
-      res.status(200).json({ id: user.id });
+      res.status(200).json({ id: user._id });
     });
   })(req, res, next);
 });
