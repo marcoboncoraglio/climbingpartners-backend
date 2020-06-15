@@ -7,10 +7,6 @@ export interface IUserLoginInterface extends Document {
 }
 
 const userLoginSchema: Schema = new Schema({
-    _id: {
-        type: mongoose.Types.ObjectId,
-        default: new mongoose.Types.ObjectId(),
-    },
     username: {
         type: String,
     },

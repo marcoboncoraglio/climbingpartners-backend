@@ -6,9 +6,9 @@ export interface IUserCardInterface extends Document {
 }
 
 const userCardSchema: Schema = new Schema({
-  _id: {
+  id: {
     type: mongoose.Types.ObjectId,
-    default: new mongoose.Types.ObjectId(),
+    required: true,
   },
   name: {
     type: String,
