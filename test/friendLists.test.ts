@@ -1,7 +1,7 @@
 import app from '../src/index';
 import supertest from 'supertest';
 
-let id: string;
+let _id: string;
 const contentType: string = 'application/json; charset=utf-8';
 let cookie: any;
 
@@ -19,7 +19,7 @@ describe('Testing friendList API', () => {
             .expect(200)
             .end((err: any, res: any) => {
                 if (err) { throw err; }
-                id = res.body.id;
+                _id = res.body.id;
                 cookie = res.headers['set-cookie'];
                 done();
             });
@@ -42,6 +42,7 @@ describe('Testing friendList API', () => {
         supertest(app)
             .post('/api/friendLists')
             .send({
+                id: _id,
                 friendList: [1, 2],
                 friendRequests: [1],
             })
@@ -51,20 +52,20 @@ describe('Testing friendList API', () => {
             .expect(201)
             .end((err: any, res: any) => {
                 if (err) { throw err; }
-                id = res.body._id;
+                _id = res.body.id;
                 done();
             });
     });
 
     it('Get friendList by id', (done) => {
         supertest(app)
-            .get(`/api/friendLists/${id}`)
+            .get(`/api/friendLists/${_id}`)
             .expect('Content-Type', contentType)
             .set('cookie', cookie)
             .expect(200)
             .end((err: any, res: any) => {
                 if (err) { throw err; }
-                expect(res.body._id).toEqual(id);
+                expect(res.body.id).toEqual(_id);
                 done();
             });
     });
@@ -76,7 +77,7 @@ describe('Testing friendList API', () => {
         };
 
         supertest(app)
-            .put(`/api/friendLists/${id}`)
+            .put(`/api/friendLists/${_id}`)
             .send({
                 friendList: newFriendsLists.friendList,
                 friendRequests: newFriendsLists.friendRequests,
@@ -99,7 +100,7 @@ describe('Testing friendList API', () => {
     it('Patch friendList', (done) => {
         const newFriendList = [1, 2];
         supertest(app)
-            .patch(`/api/friendLists/${id}`)
+            .patch(`/api/friendLists/${_id}`)
             .send({
                 friendList: newFriendList,
             })
@@ -117,7 +118,7 @@ describe('Testing friendList API', () => {
 
     it('Delete friendList', (done) => {
         supertest(app)
-            .delete(`/api/friendLists/${id}`)
+            .delete(`/api/friendLists/${_id}`)
             .set('Content-Type', contentType)
             .set('Accept', 'application/json')
             .set('cookie', cookie)
