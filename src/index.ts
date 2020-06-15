@@ -4,15 +4,20 @@ import mongoose from 'mongoose';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
+import helmet from 'helmet';
+
 
 dotenv.config();
 const IN_PROD = process.env.NODE_ENV === 'production';
 const PROTECT_ROUTES = true;
 
 const app = express();
+
 app.disable('x-powered-by');
 
 app.use(express.json());
+
+app.use(helmet());
 
 app.use(session({
      secret: crypto.randomBytes(20).toString('hex'),
