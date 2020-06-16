@@ -135,7 +135,7 @@ describe("Testing userCards API", () => {
         if (err) {
           throw err;
         }
-        expect(res.body.message).toBe("Deleted User Card");
+        expect(res.body.error).toBe("Deleted User Card");
         done();
       });
   });

@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
     const newUserCard = await userCard.save();
     res.status(201).json(newUserCard);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -34,7 +34,7 @@ router.put("/:id", getUserCard, async (req: any, res: any) => {
     const updatedUserCard = await res.userCard.save();
     res.json(updatedUserCard);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -51,16 +51,16 @@ router.patch("/:id", getUserCard, async (req: any, res: any) => {
     const updatedUserCard = await res.userCard.save();
     res.json(updatedUserCard);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
 router.delete("/:id", getUserCard, async (req: any, res: any) => {
   try {
     await res.userCard.remove();
-    res.json({ message: "Deleted User Card" });
+    res.json({error: "Deleted User Card" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({error: err.message });
   }
 });
 
@@ -68,13 +68,13 @@ async function getUserCard(req: any, res: any, next: any) {
   try {
     const userCard = await UserCard.findOne({ id: req.params.id });
     if (userCard == null) {
-      return res.status(404).json({ message: "Cant find user card" });
+      return res.status(404).json({error: "Cant find user card" });
     }
 
     res.userCard = userCard;
     next();
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({error: err.message });
   }
 }
 

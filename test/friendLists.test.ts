@@ -125,7 +125,7 @@ describe('Testing friendList API', () => {
             .expect(200)
             .end((err: any, res: any) => {
                 if (err) { throw err; }
-                expect(res.body.message).toBe('Deleted friendList');
+                expect(res.body.error).toBe('Deleted friendList');
                 done();
             });
     });

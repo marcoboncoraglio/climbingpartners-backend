@@ -30,7 +30,7 @@ router.post("/", async (req: any, res: any) => {
     const newFriendLists = await friendLists.save();
     res.status(201).json(newFriendLists);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -42,7 +42,7 @@ router.put("/:id", getFriendLists, async (req: any, res: any) => {
     const updatedFriendLists = await res.friendLists.save();
     res.json(updatedFriendLists);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -59,16 +59,16 @@ router.patch("/:id", getFriendLists, async (req: any, res: any) => {
     const updatedFriendList = await res.friendLists.save();
     res.json(updatedFriendList);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
 router.delete("/:id", getFriendLists, async (req: any, res: any) => {
   try {
     await res.friendLists.remove();
-    res.json({ message: "Deleted friendList" });
+    res.json({error: "Deleted friendList" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({error: err.message });
   }
 });
 
@@ -76,13 +76,13 @@ async function getFriendLists(req: any, res: any, next: any) {
   try {
     const friendLists = await FriendLists.findOne({ id: req.params.id });
     if (friendLists == null) {
-      return res.status(404).json({ message: "Cant find friend lists" });
+      return res.status(404).json({error: "Cant find friend lists" });
     }
 
     res.friendLists = friendLists;
     next();
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({error: err.message });
   }
 }
 

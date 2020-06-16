@@ -135,7 +135,7 @@ describe("Testing locations API", () => {
         if (err) {
           throw err;
         }
-        expect(res.body.message).toBe("Deleted Location");
+        expect(res.body.error).toBe("Deleted Location");
         done();
       });
   });

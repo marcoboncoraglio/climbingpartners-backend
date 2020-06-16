@@ -24,7 +24,7 @@ router.post('/', async (req: any, res: any) => {
     const newUserDetails = await userDetails.save();
     res.status(201).json(newUserDetails);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -38,7 +38,7 @@ router.put('/:id', getUserDetails, async (req: any, res: any) => {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
@@ -63,16 +63,16 @@ router.patch('/:id', getUserDetails, async (req: any, res: any) => {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({error: err.message });
   }
 });
 
 router.delete('/:id', getUserDetails, async (req: any, res: any) => {
   try {
     await res.userDetails.remove();
-    res.json({ message: 'Deleted User Details' });
+    res.json({error: 'Deleted User Details' });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({error: err.message });
   }
 });
 
@@ -80,14 +80,14 @@ async function getUserDetails(req: any, res: any, next: any) {
   try {
     const userDetails = await UserDetails.findOne({ id: req.params.id });
     if (userDetails == null) {
-      return res.status(404).json({ message: 'Cant find user details' });
+      return res.status(404).json({error: 'Cant find user details' });
     }
 
     res.userDetails = userDetails;
     next();
 
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({error: err.message });
   }
 }
 

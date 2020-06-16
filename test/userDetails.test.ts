@@ -149,7 +149,7 @@ describe("Testing userDetails API", () => {
         if (err) {
           throw err;
         }
-        expect(res.body.message).toBe("Deleted User Details");
+        expect(res.body.error).toBe("Deleted User Details");
         done();
       });
   });

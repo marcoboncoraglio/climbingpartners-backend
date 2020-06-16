@@ -56,7 +56,7 @@ app.use('/api/auth', authRouter);
 
 function ensureAuthenticated(req: any, res: any, next: any) {
      if (req.isAuthenticated()) { return next(); }
-     res.status(401).send({ message: 'Not authenticated' });
+     res.status(401).send({error: 'Not authenticated' });
 }
 
 if (PROTECT_ROUTES || IN_PROD) {
