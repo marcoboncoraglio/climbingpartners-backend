@@ -2,7 +2,7 @@ POST http://localhost:4000/api/auth/register
 content-type: application/json
 
 {
-    "username": "marco1",
+    "username": "marco5",
     "password": "hi"
 }
 
@@ -12,7 +12,7 @@ POST http://localhost:4000/api/auth/login
 content-type: application/json
 
 {
-    "username": "marco1",
+    "username": "marco",
     "password": "hi"
 }
 
