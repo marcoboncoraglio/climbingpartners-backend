@@ -2,6 +2,7 @@ import express from 'express';
 import UserDetails from '../models/userDetails';
 const router = express.Router();
 
+// should not return all details, should get details for the logged in user
 router.get('/', async (req: any, res: any) => {
   const userDetails = await UserDetails.find();
   res.status(200).json(userDetails);

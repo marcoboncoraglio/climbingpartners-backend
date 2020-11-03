@@ -2,26 +2,21 @@ import express from "express";
 import FriendLists from "../models/friendLists";
 const router = express.Router();
 
-router.get("/", async (req: any, res: any) => {
-  const friendLists = await FriendLists.find();
-  res.json(friendLists);
-});
-
-router.get("/:id", getFriendLists, (req: any, res: any) => {
+router.get("/", getFriendLists, (req: any, res: any) => {
   res.json(res.friendLists);
 });
 
-router.get("/:id/friends", getFriendLists, (req: any, res: any) => {
+router.get("/friends", getFriendLists, (req: any, res: any) => {
   res.json(res.friendLists.friendList);
 });
 
-router.get("/:id/requests", getFriendLists, (req: any, res: any) => {
+router.get("/requests", getFriendLists, (req: any, res: any) => {
   res.json(res.friendLists.friendRequests);
 });
 
 router.post("/", async (req: any, res: any) => {
   const friendLists = new FriendLists({
-    id: req.body.id,
+    id: req.userId,
     friendList: req.body.friendList,
     friendRequests: req.body.friendRequests,
   });
@@ -34,7 +29,7 @@ router.post("/", async (req: any, res: any) => {
   }
 });
 
-router.put("/:id", getFriendLists, async (req: any, res: any) => {
+router.put("/", getFriendLists, async (req: any, res: any) => {
   res.friendLists.friendList = req.body.friendList;
   res.friendLists.friendRequests = req.body.friendRequests;
 
@@ -46,7 +41,7 @@ router.put("/:id", getFriendLists, async (req: any, res: any) => {
   }
 });
 
-router.patch("/:id", getFriendLists, async (req: any, res: any) => {
+router.patch("/", getFriendLists, async (req: any, res: any) => {
   if (req.body.friendList != null) {
     res.friendLists.friendList = req.body.friendList;
   }
@@ -63,7 +58,7 @@ router.patch("/:id", getFriendLists, async (req: any, res: any) => {
   }
 });
 
-router.delete("/:id", getFriendLists, async (req: any, res: any) => {
+router.delete("/", getFriendLists, async (req: any, res: any) => {
   try {
     await res.friendLists.remove();
     res.json({error: "Deleted friendList" });
@@ -74,7 +69,7 @@ router.delete("/:id", getFriendLists, async (req: any, res: any) => {
 
 async function getFriendLists(req: any, res: any, next: any) {
   try {
-    const friendLists = await FriendLists.findOne({ id: req.params.id });
+    const friendLists = await FriendLists.findOne({ id: req.userId });
     if (friendLists == null) {
       return res.status(404).json({error: "Cant find friend lists" });
     }
