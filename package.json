@@ -14,30 +14,30 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/express-session": "^1.15.15",
-    "@types/jest": "^24.0.22",
-    "@types/mongoose": "^5.5.30",
-    "@types/node": "^12.12.6",
+    "@types/express-session": "^1.17.0",
+    "@types/jest": "^24.9.1",
+    "@types/mongoose": "^5.7.37",
+    "@types/node": "^12.19.3",
     "@types/passport-google-oauth": "^1.0.41",
     "@types/passport-local-mongoose": "^4.0.13",
-    "@types/supertest": "^2.0.8",
+    "@types/supertest": "^2.0.10",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
     "supertest": "^4.0.2",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
+    "ts-jest": "^24.3.0",
+    "ts-node": "^8.10.2",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "@types/helmet": "0.0.47",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.0",
-    "helmet": "^3.23.0",
-    "mongoose": "^5.7.8",
-    "passport": "^0.4.0",
+    "express-session": "^1.17.1",
+    "helmet": "^3.23.3",
+    "mongoose": "^5.10.11",
+    "passport": "^0.4.1",
     "passport-local-mongoose": "^5.0.1"
   }
 }
