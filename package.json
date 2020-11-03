@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --config \"./nodemon.json\"/",
     "lint": "tsc --noEmit && tslint \"**/*.{ts}\" --fix",
-    "test": "jest --forceExit --verbose --detectOpenHandles",
+    "test": "jest --forceExit --verbose false --watch --detectOpenHandles",
     "test-coverage": "jest --forceExit --coverage --verbose --detectOpenHandles",
     "build": "tsc && npm run lint",
     "build-deploy": "tsc && npm run lint && npm run test-coverage"
@@ -14,7 +14,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/express-session": "^1.17.0",
     "@types/jest": "^24.9.1",
     "@types/mongoose": "^5.7.37",
     "@types/node": "^12.19.3",
@@ -34,8 +33,8 @@
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
     "helmet": "^3.23.3",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.11",
     "passport": "^0.4.1",
     "passport-local-mongoose": "^5.0.1"
