@@ -1,11 +1,9 @@
 import express from 'express';
 import passport from 'passport';
 import mongoose from 'mongoose';
-import session from 'express-session';
 import dotenv from 'dotenv';
-import crypto from 'crypto';
 import helmet from 'helmet';
-
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 const IN_PROD = process.env.NODE_ENV === 'production';
@@ -19,29 +17,20 @@ app.use(express.json());
 
 app.use(helmet());
 
-app.use(session({
-     secret: crypto.randomBytes(20).toString('hex'),
-     resave: false,
-     saveUninitialized: false,
-     cookie: {
-          maxAge: 1000 * 60 * 60 * 2,   // 2 hours
-          sameSite: true,
-          secure: IN_PROD,
-     },
-}));
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 // PASSPORT
 import loadLoginConfig from './passport-config/userLoginConfig';
 loadLoginConfig(passport);
 
 // DATABASE
-const DB_CONNECTION = IN_PROD ? process.env.DB_CONNECTION_PRODUCTION
-     : process.env.DB_CONNECTION_TEST;
-mongoose.connect(DB_CONNECTION as string,
-     { useNewUrlParser: true, useUnifiedTopology: true });
+const DB_CONNECTION = IN_PROD
+  ? process.env.DB_CONNECTION_PRODUCTION
+  : process.env.DB_CONNECTION_TEST;
+mongoose.connect(DB_CONNECTION as string, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 mongoose.set('useCreateIndex', true);
 const db = mongoose.connection;
@@ -54,19 +43,34 @@ db.once('open', () => console.log('connected to database'));
 import authRouter from './routes/authRoutes';
 app.use('/api/auth', authRouter);
 
-function ensureAuthenticated(req: any, res: any, next: any) {
-     if (req.isAuthenticated()) { return next(); }
-     res.status(401).send({error: 'Not authenticated' });
+function authenticateToken(req: any, res: any, next: any) {
+  // Gather the jwt access token from the request header
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401); // if there isn't any token
+
+  jwt.verify(
+    token,
+    process.env.TOKEN_SECRET as string,
+    (err: any, user: any) => {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(403);
+      }
+      req.userId = user.id;
+      next();
+    }
+  );
 }
 
 if (PROTECT_ROUTES || IN_PROD) {
-     app.all('*', (req, res, next) => {
-          if (req.path === '/api/auth/login' || req.path === '/api/auth/register') {
-               next();
-          } else {
-               ensureAuthenticated(req, res, next);
-          }
-     });
+  app.all('*', (req, res, next) => {
+    if (req.path === '/api/auth/login' || req.path === '/api/auth/register') {
+      next();
+    } else {
+      authenticateToken(req, res, next);
+    }
+  });
 }
 
 import userCardRouter from './routes/userCardRoutes';
@@ -82,4 +86,3 @@ import friendListsRouter from './routes/friendListsRoutes';
 app.use('/api/friendLists', friendListsRouter);
 
 export default app;
-
