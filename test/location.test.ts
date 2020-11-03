@@ -1,42 +1,36 @@
 import app from "../src/index";
 import supertest from "supertest";
+const jwt = require('jsonwebtoken');
 
 describe("Testing locations API", () => {
   let _id: string;
   const contentType: string = "application/json; charset=utf-8";
-  let cookie: any;
+  let token: any;
 
   beforeAll((done) => {
     supertest(app)
-      .post("/api/auth/login")
+      .post('/api/auth/login')
       .send({
-        username: "marco1",
-        password: "hi",
+        username: 'marco1',
+        password: 'hi',
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .expect(200)
       .end((err: any, res: any) => {
         if (err) {
           throw err;
         }
-        _id = res.body.id;
-        cookie = res.headers["set-cookie"];
-        done();
-      });
-  });
-
-  afterAll((done) => {
-    supertest(app)
-      .post("/api/auth/logout")
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
-      .set("cookie", cookie)
-      .expect(200)
-      .end((err: any, res: any) => {
-        if (err) {
-          throw err;
-        }
+        token = res.body;
+        jwt.verify(
+          token,
+          process.env.TOKEN_SECRET as string,
+          (err: any, user: any) => {
+            console.log(err);
+            if (err) return res.sendStatus(403);
+            _id = user.id;
+          }
+        );
         done();
       });
   });
@@ -51,7 +45,7 @@ describe("Testing locations API", () => {
       })
       .set("Content-Type", contentType)
       .set("Accept", "application/json")
-      .set("cookie", cookie)
+      .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .end((err, res) => {
         if (err) {
@@ -66,7 +60,7 @@ describe("Testing locations API", () => {
     supertest(app)
       .get(`/api/locations/${_id}`)
       .expect("Content-Type", contentType)
-      .set("cookie", cookie)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -91,7 +85,7 @@ describe("Testing locations API", () => {
       })
       .set("Content-Type", contentType)
       .set("Accept", "application/json")
-      .set("cookie", cookie)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -113,7 +107,7 @@ describe("Testing locations API", () => {
       })
       .set("Content-Type", contentType)
       .set("Accept", "application/json")
-      .set("cookie", cookie)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -129,7 +123,7 @@ describe("Testing locations API", () => {
       .delete(`/api/locations/${_id}`)
       .set("Content-Type", contentType)
       .set("Accept", "application/json")
-      .set("cookie", cookie)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
