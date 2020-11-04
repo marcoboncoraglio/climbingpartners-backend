@@ -22,7 +22,7 @@ describe('Testing authentication API: local strategy', () => {
         if (err) {
           throw err;
         }
-        token = res.body;
+        token = res.body.token;
 
         jwt.verify(
           token,

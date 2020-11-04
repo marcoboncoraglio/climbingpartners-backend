@@ -21,7 +21,7 @@ describe('Testing userDetails API', () => {
         if (err) {
           throw err;
         }
-        token = res.body;
+        token = res.body.token;
         _id = getIdFromToken(token);
         done();
       });

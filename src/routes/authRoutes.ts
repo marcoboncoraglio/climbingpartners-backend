@@ -48,7 +48,7 @@ router.post('/register', (req: any, res: any, next: any) => {
         expiresIn: '1800s',
       });
 
-      res.status(201).json(token);
+      res.status(201).json({ token: token });
     }
   );
 });
@@ -67,11 +67,11 @@ router.post('/login', (req: any, res: any) => {
         console.log(err);
       }
 
-      const token = jwt.sign({ id: user._id  }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '1800s',
       });
 
-      res.json(token);
+      res.json({ token: token });
     });
   })(req, res);
 });
