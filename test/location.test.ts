@@ -1,10 +1,10 @@
-import app from "../src/index";
-import supertest from "supertest";
-const jwt = require('jsonwebtoken');
+import app from '../src/index';
+import supertest from 'supertest';
+import { getIdFromToken } from '../src/utils/jwtUtils';
 
-describe("Testing locations API", () => {
+describe('Testing locations API', () => {
   let _id: string;
-  const contentType: string = "application/json; charset=utf-8";
+  const contentType: string = 'application/json; charset=utf-8';
   let token: any;
 
   beforeAll((done) => {
@@ -22,29 +22,20 @@ describe("Testing locations API", () => {
           throw err;
         }
         token = res.body;
-        jwt.verify(
-          token,
-          process.env.TOKEN_SECRET as string,
-          (err: any, user: any) => {
-            console.log(err);
-            if (err) return res.sendStatus(403);
-            _id = user.id;
-          }
-        );
+        _id = getIdFromToken(token);
         done();
       });
   });
 
-  it("Post location", (done) => {
+  it('Post location', (done) => {
     supertest(app)
-      .post("/api/locations")
+      .post('/api/locations')
       .send({
-        id: _id,
         lat: 43.1,
         lng: 22.44,
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .end((err, res) => {
@@ -56,10 +47,10 @@ describe("Testing locations API", () => {
       });
   });
 
-  it("Get location by id", (done) => {
+  it('Get location by id', (done) => {
     supertest(app)
       .get(`/api/locations/${_id}`)
-      .expect("Content-Type", contentType)
+      .expect('Content-Type', contentType)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -71,7 +62,7 @@ describe("Testing locations API", () => {
       });
   });
 
-  it("Put location", (done) => {
+  it('Put location', (done) => {
     const newLocation = {
       lat: 44.1,
       lng: 23.44,
@@ -83,8 +74,8 @@ describe("Testing locations API", () => {
         lat: newLocation.lat,
         lng: newLocation.lng,
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -98,15 +89,15 @@ describe("Testing locations API", () => {
       });
   });
 
-  it("Patch location", (done) => {
+  it('Patch location', (done) => {
     const newLat = 43.1;
     supertest(app)
       .patch(`/api/locations/${_id}`)
       .send({
         lat: newLat,
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -118,18 +109,18 @@ describe("Testing locations API", () => {
       });
   });
 
-  it("Delete friendList", (done) => {
+  it('Delete friendList', (done) => {
     supertest(app)
       .delete(`/api/locations/${_id}`)
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
           throw err;
         }
-        expect(res.body.error).toBe("Deleted Location");
+        expect(res.body.error).toBe('Deleted Location');
         done();
       });
   });

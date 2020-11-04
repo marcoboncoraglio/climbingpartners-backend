@@ -14,7 +14,7 @@ router.get("/:id", getLocation, (req: any, res: any) => {
 
 router.post("/", async (req: any, res: any) => {
   const location = new Location({
-    id: req.body.id,
+    id: req.userId,
     lat: req.body.lat,
     lng: req.body.lng,
   });

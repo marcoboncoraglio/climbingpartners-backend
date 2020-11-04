@@ -1,10 +1,10 @@
-import app from "../src/index";
-import supertest from "supertest";
-const jwt = require('jsonwebtoken');
+import app from '../src/index';
+import supertest from 'supertest';
+import { getIdFromToken } from '../src/utils/jwtUtils';
 
-describe("Testing userDetails API", () => {
+describe('Testing userDetails API', () => {
   let _id: string;
-  const contentType: string = "application/json; charset=utf-8";
+  const contentType: string = 'application/json; charset=utf-8';
   let token: any;
 
   beforeAll((done) => {
@@ -22,31 +22,23 @@ describe("Testing userDetails API", () => {
           throw err;
         }
         token = res.body;
-        jwt.verify(
-          token,
-          process.env.TOKEN_SECRET as string,
-          (err: any, user: any) => {
-            console.log(err);
-            if (err) return res.sendStatus(403);
-            _id = user.id;
-          }
-        );
+        _id = getIdFromToken(token);
         done();
       });
   });
 
-  it("Post userCard", (done) => {
+  it('Post userCard', (done) => {
     supertest(app)
-      .post("/api/userDetails")
+      .post('/api/userDetails')
       .send({
         id: _id,
-        about: "hi",
-        availableEquipment: ["70m Rope"],
-        languagesSpoken: ["Italian"],
-        climbingStyles: ["Lead"],
+        about: 'hi',
+        availableEquipment: ['70m Rope'],
+        languagesSpoken: ['Italian'],
+        climbingStyles: ['Lead'],
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(201)
       .end((err, res) => {
@@ -58,10 +50,10 @@ describe("Testing userDetails API", () => {
       });
   });
 
-  it("Get userDetails by id", (done) => {
+  it('Get userDetails by id', (done) => {
     supertest(app)
-      .get(`/api/userDetails/${_id}`)
-      .expect("Content-Type", contentType)
+      .get(`/api/userDetails/`)
+      .expect('Content-Type', contentType)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -73,24 +65,24 @@ describe("Testing userDetails API", () => {
       });
   });
 
-  it("Put userDetails", (done) => {
+  it('Put userDetails', (done) => {
     const newUserDetails = {
-      about: "hi1",
-      availableEquipment: ["80m Rope"],
-      languagesSpoken: ["Italian", "German"],
-      climbingStyles: ["Lead", "Bouldering"],
+      about: 'hi1',
+      availableEquipment: ['80m Rope'],
+      languagesSpoken: ['Italian', 'German'],
+      climbingStyles: ['Lead', 'Bouldering'],
     };
 
     supertest(app)
-      .put(`/api/userDetails/${_id}`)
+      .put(`/api/userDetails/`)
       .send({
         about: newUserDetails.about,
         availableEquipment: newUserDetails.availableEquipment,
         languagesSpoken: newUserDetails.languagesSpoken,
         climbingStyles: newUserDetails.climbingStyles,
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -112,15 +104,15 @@ describe("Testing userDetails API", () => {
       });
   });
 
-  it("Patch userDetails", (done) => {
-    const newAbout = "hi";
+  it('Patch userDetails', (done) => {
+    const newAbout = 'hi';
     supertest(app)
-      .patch(`/api/userDetails/${_id}`)
+      .patch(`/api/userDetails/`)
       .send({
         about: newAbout,
       })
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
@@ -132,18 +124,18 @@ describe("Testing userDetails API", () => {
       });
   });
 
-  it("Delete userDetails", (done) => {
+  it('Delete userDetails', (done) => {
     supertest(app)
-      .delete(`/api/userDetails/${_id}`)
-      .set("Content-Type", contentType)
-      .set("Accept", "application/json")
+      .delete(`/api/userDetails/`)
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err, res) => {
         if (err) {
           throw err;
         }
-        expect(res.body.error).toBe("Deleted User Details");
+        expect(res.body.error).toBe('Deleted User Details');
         done();
       });
   });

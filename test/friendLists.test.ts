@@ -1,6 +1,6 @@
 import app from '../src/index';
 import supertest from 'supertest';
-const jwt = require('jsonwebtoken');
+import { getIdFromToken } from '../src/utils/jwtUtils';
 
 let _id: string;
 const contentType: string = 'application/json; charset=utf-8';
@@ -22,15 +22,7 @@ describe('Testing friendList API', () => {
           throw err;
         }
         token = res.body;
-        jwt.verify(
-          token,
-          process.env.TOKEN_SECRET as string,
-          (err: any, user: any) => {
-            console.log(err);
-            if (err) return res.sendStatus(403);
-            _id = user.id;
-          }
-        );
+        _id = getIdFromToken(token);
         done();
       });
   });

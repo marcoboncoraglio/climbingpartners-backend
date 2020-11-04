@@ -2,19 +2,13 @@ import express from 'express';
 import UserDetails from '../models/userDetails';
 const router = express.Router();
 
-// should not return all details, should get details for the logged in user
-router.get('/', async (req: any, res: any) => {
-  const userDetails = await UserDetails.find();
-  res.status(200).json(userDetails);
-});
-
-router.get('/:id', getUserDetails, (req: any, res: any) => {
+router.get('/', getUserDetails, (req: any, res: any) => {
   res.status(200).json(res.userDetails);
 });
 
 router.post('/', async (req: any, res: any) => {
   const userDetails = new UserDetails({
-    id: req.body.id,
+    id: req.userId,
     about: req.body.about,
     availableEquipment: req.body.availableEquipment,
     climbingStyles: req.body.climbingStyles,
@@ -25,11 +19,11 @@ router.post('/', async (req: any, res: any) => {
     const newUserDetails = await userDetails.save();
     res.status(201).json(newUserDetails);
   } catch (err) {
-    res.status(400).json({error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
-router.put('/:id', getUserDetails, async (req: any, res: any) => {
+router.put('/', getUserDetails, async (req: any, res: any) => {
   res.userDetails.about = req.body.about;
   res.userDetails.availableEquipment = req.body.availableEquipment;
   res.userDetails.climbingStyles = req.body.climbingStyles;
@@ -39,11 +33,11 @@ router.put('/:id', getUserDetails, async (req: any, res: any) => {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
   } catch (err) {
-    res.status(400).json({error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
-router.patch('/:id', getUserDetails, async (req: any, res: any) => {
+router.patch('/', getUserDetails, async (req: any, res: any) => {
   if (req.body.about != null) {
     res.userDetails.about = req.body.about;
   }
@@ -64,31 +58,30 @@ router.patch('/:id', getUserDetails, async (req: any, res: any) => {
     const updatedUserDetails = await res.userDetails.save();
     res.json(updatedUserDetails);
   } catch (err) {
-    res.status(400).json({error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
-router.delete('/:id', getUserDetails, async (req: any, res: any) => {
+router.delete('/', getUserDetails, async (req: any, res: any) => {
   try {
     await res.userDetails.remove();
-    res.json({error: 'Deleted User Details' });
+    res.json({ error: 'Deleted User Details' });
   } catch (err) {
-    res.status(500).json({error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
 async function getUserDetails(req: any, res: any, next: any) {
   try {
-    const userDetails = await UserDetails.findOne({ id: req.params.id });
+    const userDetails = await UserDetails.findOne({ id: req.userId });
     if (userDetails == null) {
-      return res.status(404).json({error: 'Cant find user details' });
+      return res.status(404).json({ error: 'Cant find user details' });
     }
 
     res.userDetails = userDetails;
     next();
-
   } catch (err) {
-    return res.status(500).json({error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 }
 
