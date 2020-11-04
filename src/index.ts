@@ -3,20 +3,25 @@ import passport from 'passport';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
+
+const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
 dotenv.config();
 const IN_PROD = process.env.NODE_ENV === 'production';
 const PROTECT_ROUTES = true;
 
-const app = express();
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
-app.disable('x-powered-by');
+const app = express();
 
 app.use(express.json());
 
 app.use(helmet());
-
+app.use(cors(corsOptions));
 app.use(passport.initialize());
 
 // PASSPORT
