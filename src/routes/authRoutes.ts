@@ -14,25 +14,25 @@ router.post('/register', (req: any, res: any, next: any) => {
   UserLogin.register(
     new UserLogin({ username: req.body.username }),
     req.body.password,
-    async (err, account) => {
+    async (err, user) => {
       if (err) {
         return res.json({ error: err.message });
       }
 
       const friendLists = new FriendLists({
-        id: account._id,
+        id: user._id,
       });
 
       const userCard = new UserCard({
-        id: account._id,
+        id: user._id,
       });
 
       const userDetails = new UserDetails({
-        id: account._id,
+        id: user._id,
       });
 
       const location = new Location({
-        id: account._id,
+        id: user._id,
       });
 
       try {
@@ -44,11 +44,11 @@ router.post('/register', (req: any, res: any, next: any) => {
         res.status(400).json({ error: err.message });
       }
 
-      const token = jwt.sign({ id: account._id }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '1800s',
       });
 
-      res.status(201).json({ token: token });
+      res.status(201).json({ token: token, uid: user._id });
     }
   );
 });
@@ -71,7 +71,7 @@ router.post('/login', (req: any, res: any) => {
         expiresIn: '1800s',
       });
 
-      res.json({ token: token });
+      res.json({ token: token, uid: user._id });
     });
   })(req, res);
 });
