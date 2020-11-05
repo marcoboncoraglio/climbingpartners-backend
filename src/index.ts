@@ -48,6 +48,7 @@ db.once('open', () => console.log('connected to database'));
 import authRouter from './routes/authRoutes';
 app.use('/api/auth', authRouter);
 
+// Authenticate Token middleware
 function authenticateToken(req: any, res: any, next: any) {
   // Gather the jwt access token from the request header
   const authHeader = req.headers['authorization'];

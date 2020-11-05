@@ -40,15 +40,15 @@ router.post('/register', (req: any, res: any, next: any) => {
         await friendLists.save();
         await userCard.save();
         await userDetails.save();
+
+        const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+          expiresIn: '1800s',
+        });
+
+        res.status(201).json({ token: token, uid: user._id });
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
-
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
-        expiresIn: '1800s',
-      });
-
-      res.status(201).json({ token: token, uid: user._id });
     }
   );
 });
