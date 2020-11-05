@@ -8,8 +8,6 @@ export default function localLoginConfig(passport: any) {
 
 function loadLocalLoginConfig(passport: any) {
     passport.use(UserLogin.createStrategy());
-    passport.serializeUser(UserLogin.serializeUser());
-    passport.deserializeUser(UserLogin.deserializeUser());
 }
 
 /*
