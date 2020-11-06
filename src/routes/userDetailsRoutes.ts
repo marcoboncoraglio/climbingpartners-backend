@@ -6,6 +6,19 @@ router.get('/', getUserDetails, (req: any, res: any) => {
   res.status(200).json(res.userDetails);
 });
 
+router.get('/:id', async (req: any, res: any) => {
+  try {
+    const userDetails = await UserDetails.findOne({ id: req.params.id });
+    if (userDetails == null) {
+      return res.status(404).json({ error: 'Cant find user card' });
+    }
+
+    res.status(200).json(userDetails);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/', async (req: any, res: any) => {
   const userDetails = new UserDetails({
     id: req.userId,
@@ -13,6 +26,7 @@ router.post('/', async (req: any, res: any) => {
     availableEquipment: req.body.availableEquipment,
     climbingStyles: req.body.climbingStyles,
     languagesSpoken: req.body.languagesSpoken,
+    birthday: req.body.birthday,
   });
 
   try {
@@ -28,6 +42,7 @@ router.put('/', getUserDetails, async (req: any, res: any) => {
   res.userDetails.availableEquipment = req.body.availableEquipment;
   res.userDetails.climbingStyles = req.body.climbingStyles;
   res.userDetails.languagesSpoken = req.body.languagesSpoken;
+  res.userDetails.birthday = req.body.birthday;
 
   try {
     const updatedUserDetails = await res.userDetails.save();
