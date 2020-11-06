@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IUserDetailsInterface extends Document {
   about: string;
@@ -14,23 +14,27 @@ const userDetailsSchema: Schema = new Schema({
   },
   about: {
     type: String,
-    default: "Hi there!",
+    default: 'Hi there!',
   },
   availableEquipment: {
     type: [String],
-    default: ["60m Rope"],
+    default: ['60m Rope'],
   },
   climbingStyles: {
     type: [String],
-    default: ["Lead", "Bouldering"],
+    default: ['Lead', 'Bouldering'],
   },
   languagesSpoken: {
     type: [String],
-    default: ["English"],
+    default: ['English'],
+  },
+  birthday: {
+    type: Date,
+    default: new Date(),
   },
 });
 
 export default mongoose.model<IUserDetailsInterface>(
-  "userDetails",
+  'userDetails',
   userDetailsSchema
 );
