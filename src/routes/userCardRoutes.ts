@@ -6,6 +6,19 @@ router.get('/', getUserCard, (req: any, res: any) => {
   res.status(200).json(res.userCard);
 });
 
+router.get('/:id', async (req: any, res: any) => {
+  try {
+    const userCard = await UserCard.findOne({ id: req.params.id });
+    if (userCard == null) {
+      return res.status(404).json({ error: 'Cant find user card' });
+    }
+
+    res.status(200).json(userCard);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/', async (req: any, res: any) => {
   const userCard = new UserCard({
     id: req.userId,
