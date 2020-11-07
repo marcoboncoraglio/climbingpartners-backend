@@ -6,7 +6,7 @@ export interface IFriendLists extends Document {
 }
 
 const friendListsSchema: Schema = new Schema({
-  id: {
+  _id: {
     type: mongoose.Types.ObjectId,
     required: true,
   },

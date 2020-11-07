@@ -6,7 +6,7 @@ export interface ILocationInterface extends Document {
 }
 
 const locationSchema: Schema = new Schema({
-  id: {
+  _id: {
     type: mongoose.Types.ObjectId,
     required: true,
   },

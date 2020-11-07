@@ -8,7 +8,7 @@ export interface IUserDetailsInterface extends Document {
 }
 
 const userDetailsSchema: Schema = new Schema({
-  id: {
+  _id: {
     type: mongoose.Types.ObjectId,
     required: true,
   },
