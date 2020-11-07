@@ -20,19 +20,19 @@ router.post('/register', (req: any, res: any, next: any) => {
       }
 
       const friendLists = new FriendLists({
-        id: user._id,
+        _id: user._id,
       });
 
       const userCard = new UserCard({
-        id: user._id,
+        _id: user._id,
       });
 
       const userDetails = new UserDetails({
-        id: user._id,
+        _id: user._id,
       });
 
       const location = new Location({
-        id: user._id,
+        _id: user._id,
       });
 
       try {
@@ -41,7 +41,7 @@ router.post('/register', (req: any, res: any, next: any) => {
         await userCard.save();
         await userDetails.save();
 
-        const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
           expiresIn: '1800s',
         });
 
@@ -67,7 +67,7 @@ router.post('/login', (req: any, res: any) => {
         console.log(err);
       }
 
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '1800s',
       });
 

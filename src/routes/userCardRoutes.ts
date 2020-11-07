@@ -8,7 +8,7 @@ router.get('/', getUserCard, (req: any, res: any) => {
 
 router.get('/:id', async (req: any, res: any) => {
   try {
-    const userCard = await UserCard.findOne({ id: req.params.id });
+    const userCard = await UserCard.findOne({ _id: req.params.id });
     if (userCard == null) {
       return res.status(404).json({ error: 'Cant find user card' });
     }
@@ -74,7 +74,7 @@ router.delete('/', getUserCard, async (req: any, res: any) => {
 
 async function getUserCard(req: any, res: any, next: any) {
   try {
-    const userCard = await UserCard.findOne({ id: req.userId });
+    const userCard = await UserCard.findOne({ _id: req.userId });
     if (userCard == null) {
       return res.status(404).json({ error: 'Cant find user card' });
     }

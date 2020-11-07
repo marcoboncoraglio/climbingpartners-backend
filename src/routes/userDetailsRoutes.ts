@@ -8,7 +8,7 @@ router.get('/', getUserDetails, (req: any, res: any) => {
 
 router.get('/:id', async (req: any, res: any) => {
   try {
-    const userDetails = await UserDetails.findOne({ id: req.params.id });
+    const userDetails = await UserDetails.findOne({ _id: req.params.id });
     if (userDetails == null) {
       return res.status(404).json({ error: 'Cant find user card' });
     }
@@ -88,7 +88,7 @@ router.delete('/', getUserDetails, async (req: any, res: any) => {
 
 async function getUserDetails(req: any, res: any, next: any) {
   try {
-    const userDetails = await UserDetails.findOne({ id: req.userId });
+    const userDetails = await UserDetails.findOne({ _id: req.userId });
     if (userDetails == null) {
       return res.status(404).json({ error: 'Cant find user details' });
     }

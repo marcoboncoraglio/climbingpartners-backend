@@ -69,7 +69,7 @@ router.delete('/', getFriendLists, async (req: any, res: any) => {
 
 async function getFriendLists(req: any, res: any, next: any) {
   try {
-    const friendLists = await FriendLists.findOne({ id: req.userId });
+    const friendLists = await FriendLists.findOne({ _id: req.userId });
     if (friendLists == null) {
       return res
         .status(404)

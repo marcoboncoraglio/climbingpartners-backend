@@ -58,12 +58,12 @@ function authenticateToken(req: any, res: any, next: any) {
   jwt.verify(
     token,
     process.env.TOKEN_SECRET as string,
-    (err: any, user: any) => {
+    (err: any, obj: any) => {
       if (err) {
         console.log(err);
         return res.sendStatus(403);
       }
-      req.userId = user.id;
+      req.userId = obj._id;
       next();
     }
   );
