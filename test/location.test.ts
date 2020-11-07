@@ -22,7 +22,7 @@ describe('Testing locations API', () => {
           throw err;
         }
         token = res.body.token;
-        _id = getIdFromToken(token);
+        _id = res.body.id;
         done();
       });
   });
@@ -109,7 +109,7 @@ describe('Testing locations API', () => {
       });
   });
 
-  it('Delete friendList', (done) => {
+  it('Delete location', (done) => {
     supertest(app)
       .delete(`/api/locations/${_id}`)
       .set('Content-Type', contentType)

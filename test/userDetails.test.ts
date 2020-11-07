@@ -22,14 +22,14 @@ describe('Testing userDetails API', () => {
           throw err;
         }
         token = res.body.token;
-        _id = getIdFromToken(token);
+        _id = res.body.id;
         done();
       });
   });
 
   it('Post userCard', (done) => {
     supertest(app)
-      .post('/api/userDetails')
+      .post('/api/users/details')
       .send({
         id: _id,
         about: 'hi',
@@ -52,7 +52,7 @@ describe('Testing userDetails API', () => {
 
   it('Get userDetails by id', (done) => {
     supertest(app)
-      .get(`/api/userDetails/`)
+      .get(`/api/users/details`)
       .expect('Content-Type', contentType)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
@@ -74,7 +74,7 @@ describe('Testing userDetails API', () => {
     };
 
     supertest(app)
-      .put(`/api/userDetails/`)
+      .put(`/api/users/details`)
       .send({
         about: newUserDetails.about,
         availableEquipment: newUserDetails.availableEquipment,
@@ -107,7 +107,7 @@ describe('Testing userDetails API', () => {
   it('Patch userDetails', (done) => {
     const newAbout = 'hi';
     supertest(app)
-      .patch(`/api/userDetails/`)
+      .patch(`/api/users/details`)
       .send({
         about: newAbout,
       })
@@ -126,7 +126,7 @@ describe('Testing userDetails API', () => {
 
   it('Delete userDetails', (done) => {
     supertest(app)
-      .delete(`/api/userDetails/`)
+      .delete(`/api/users/details`)
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)

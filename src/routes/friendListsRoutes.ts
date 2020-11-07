@@ -25,7 +25,7 @@ router.post('/', async (req: any, res: any) => {
     const newFriendLists = await friendLists.save();
     res.status(201).json(newFriendLists);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(405).send(err.message);
   }
 });
 
@@ -69,7 +69,7 @@ router.delete('/', getFriendLists, async (req: any, res: any) => {
 
 async function getFriendLists(req: any, res: any, next: any) {
   try {
-    const friendLists = await FriendLists.findOne({ _id: req.userId });
+    const friendLists = await FriendLists.findOne({ id: req.userId });
     if (friendLists == null) {
       return res
         .status(404)

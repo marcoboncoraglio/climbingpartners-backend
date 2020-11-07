@@ -20,19 +20,19 @@ router.post('/register', (req: any, res: any, next: any) => {
       }
 
       const friendLists = new FriendLists({
-        _id: user._id,
+        id: user._id,
       });
 
       const userCard = new UserCard({
-        _id: user._id,
+        id: user._id,
       });
 
       const userDetails = new UserDetails({
-        _id: user._id,
+        id: user._id,
       });
 
       const location = new Location({
-        _id: user._id,
+        id: user._id,
       });
 
       try {
@@ -41,11 +41,11 @@ router.post('/register', (req: any, res: any, next: any) => {
         await userCard.save();
         await userDetails.save();
 
-        const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-          expiresIn: '1800s',
+        const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+          expiresIn: process.env.TOKEN_EXPIRATION_TIME,
         });
 
-        res.status(201).json({ token: token, uid: user._id });
+        res.status(201).json({ token: token, id: user._id });
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
@@ -67,11 +67,11 @@ router.post('/login', (req: any, res: any) => {
         console.log(err);
       }
 
-      const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-        expiresIn: '1800s',
+      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+        expiresIn: process.env.TOKEN_EXPIRATION_TIME,
       });
 
-      res.json({ token: token, uid: user._id });
+      res.json({ token: token, id: user._id });
     });
   })(req, res);
 });

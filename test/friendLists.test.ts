@@ -22,7 +22,7 @@ describe('Testing friendList API', () => {
           throw err;
         }
         token = res.body.token;
-        _id = getIdFromToken(token);
+        _id = res.body.id;
         done();
       });
   });

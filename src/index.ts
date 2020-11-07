@@ -44,10 +44,6 @@ db.on('error', (error: any) => console.error(error));
 // tslint:disable-next-line: no-console
 db.once('open', () => console.log('connected to database'));
 
-// ROUTES
-import authRouter from './routes/authRoutes';
-app.use('/api/auth', authRouter);
-
 // Authenticate Token middleware
 function authenticateToken(req: any, res: any, next: any) {
   // Gather the jwt access token from the request header
@@ -63,7 +59,7 @@ function authenticateToken(req: any, res: any, next: any) {
         console.log(err);
         return res.sendStatus(403);
       }
-      req.userId = obj._id;
+      req.userId = obj.id;
       next();
     }
   );
@@ -79,11 +75,15 @@ if (PROTECT_ROUTES || IN_PROD) {
   });
 }
 
+// ROUTES
+import authRouter from './routes/authRoutes';
+app.use('/api/auth', authRouter);
+
 import userCardRouter from './routes/userCardRoutes';
-app.use('/api/userCards', userCardRouter);
+app.use('/api/users/cards', userCardRouter);
 
 import userDetailsRouter from './routes/userDetailsRoutes';
-app.use('/api/userDetails', userDetailsRouter);
+app.use('/api/users/details', userDetailsRouter);
 
 import locationsRouter from './routes/locationRoutes';
 app.use('/api/locations', locationsRouter);

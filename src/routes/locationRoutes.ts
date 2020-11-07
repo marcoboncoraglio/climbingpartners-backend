@@ -67,7 +67,7 @@ router.delete("/:id", getLocation, async (req: any, res: any) => {
 
 async function getLocation(req: any, res: any, next: any) {
   try {
-    const location = await Location.findOne({ _id: req.params.id });
+    const location = await Location.findOne({ id: req.params.id });
     if (location == null) {
       return res.status(404).json({error: "Cant find location" });
     }

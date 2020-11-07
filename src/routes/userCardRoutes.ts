@@ -74,7 +74,7 @@ router.delete('/', getUserCard, async (req: any, res: any) => {
 
 async function getUserCard(req: any, res: any, next: any) {
   try {
-    const userCard = await UserCard.findOne({ _id: req.userId });
+    const userCard = await UserCard.findOne({ id: req.userId });
     if (userCard == null) {
       return res.status(404).json({ error: 'Cant find user card' });
     }

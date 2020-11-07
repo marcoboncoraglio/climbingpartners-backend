@@ -6,9 +6,11 @@ export interface ILocationInterface extends Document {
 }
 
 const locationSchema: Schema = new Schema({
-  _id: {
+  id: {
     type: mongoose.Types.ObjectId,
+    ref: 'userLogin',
     required: true,
+    index: true
   },
   lat: {
     type: Number,

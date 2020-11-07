@@ -22,14 +22,15 @@ describe('Testing userCards API', () => {
           throw err;
         }
         token = res.body.token;
-        _id = getIdFromToken(token);
+        _id = res.body.id;
         done();
       });
   });
 
+  let objectId;
   it('Post userCard', (done) => {
     supertest(app)
-      .post('/api/userCards')
+      .post('/api/users/cards/')
       .send({
         name: 'marco2',
       })
@@ -41,14 +42,14 @@ describe('Testing userCards API', () => {
         if (err) {
           throw err;
         }
-        _id = res.body.id;
+        objectId = res.body.id;
         done();
       });
   });
 
   it('Get userCard by id', (done) => {
     supertest(app)
-      .get(`/api/userCards/`)
+      .get(`/api/users/cards/`)
       .expect('Content-Type', contentType)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
@@ -69,7 +70,7 @@ describe('Testing userCards API', () => {
     };
 
     supertest(app)
-      .put(`/api/userCards/`)
+      .put(`/api/users/cards/`)
       .send({
         name: newUserCard.name,
         imgUrl: newUserCard.imgUrl,
@@ -92,7 +93,7 @@ describe('Testing userCards API', () => {
   it('Patch userCard', (done) => {
     const newName = 'jimmy';
     supertest(app)
-      .patch(`/api/userCards/`)
+      .patch(`/api/users/cards/`)
       .send({
         name: newName,
       })
@@ -111,7 +112,7 @@ describe('Testing userCards API', () => {
 
   it('Delete userCard', (done) => {
     supertest(app)
-      .delete(`/api/userCards/`)
+      .delete(`/api/users/cards/`)
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)

@@ -12,7 +12,7 @@ describe('Testing authentication API: local strategy', () => {
     supertest(app)
       .post('/api/auth/register')
       .send({
-        username: 'testobject10',
+        username: 'testobject101',
         password: 'hi',
       })
       .set('Content-Type', contentType)
@@ -23,17 +23,7 @@ describe('Testing authentication API: local strategy', () => {
           throw err;
         }
         token = res.body.token;
-
-        jwt.verify(
-          token,
-          process.env.TOKEN_SECRET as string,
-          (err: any, user: any) => {
-            if (err) {
-              console.log(err);
-            }
-            _id = user.id;
-          }
-        );
+        _id = res.body.id;
 
         done();
       });
@@ -43,7 +33,7 @@ describe('Testing authentication API: local strategy', () => {
     supertest(app)
       .post('/api/auth/login')
       .send({
-        username: 'testobject9',
+        username: 'testobject101',
         password: 'hi',
       })
       .set('Content-Type', contentType)

@@ -6,9 +6,11 @@ export interface IFriendLists extends Document {
 }
 
 const friendListsSchema: Schema = new Schema({
-  _id: {
+  id: {
     type: mongoose.Types.ObjectId,
+    ref: 'userLogin',
     required: true,
+    index: true
   },
   friendList: {
     type: [String],
