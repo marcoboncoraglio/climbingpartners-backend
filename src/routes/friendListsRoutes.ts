@@ -2,81 +2,134 @@ import express from 'express';
 import FriendLists from '../models/friendLists';
 const router = express.Router();
 
-router.get('/', getFriendLists, (req: any, res: any) => {
-  res.json(res.friendLists);
+router.get('/', getFriends, getFriendRequests, (req: any, res: any) => {
+  res.json({ friendList: res.friendList, friendRequests: res.friendRequests });
 });
 
-router.get('/friends', getFriendLists, (req: any, res: any) => {
-  res.json(res.friendLists.friendList);
+router.get('/friends', getFriends, (req: any, res: any) => {
+  res.json(res.friendList);
 });
 
-router.get('/requests', getFriendLists, (req: any, res: any) => {
-  res.json(res.friendLists.friendRequests);
+router.get('/requests', getFriendRequests, (req: any, res: any) => {
+  res.json(res.friendRequests);
 });
 
-router.post('/', async (req: any, res: any) => {
-  const friendLists = new FriendLists({
-    id: req.userId,
-    friendList: req.body.friendList,
-    friendRequests: req.body.friendRequests,
-  });
+// add validation
+router.post('/sendFriendRequest', async (req: any, res: any) => {
+  if (req.body.addedFriendId == null) {
+    res.sendStatus(400);
+  }
 
   try {
-    const newFriendLists = await friendLists.save();
-    res.status(201).json(newFriendLists);
+    await FriendLists.updateOne(
+      { id: req.body.addedFriendId },
+      { $addToSet: { friendRequests: req.userId } }
+    );
   } catch (err) {
-    res.status(405).send(err.message);
+    return res.status(400).send({ message: err });
   }
+
+  return res.sendStatus(200);
 });
 
-router.put('/', getFriendLists, async (req: any, res: any) => {
-  res.friendLists.friendList = req.body.friendList;
-  res.friendLists.friendRequests = req.body.friendRequests;
+// add validation
+router.post('/acceptFriendRequest', async (req: any, res: any) => {
+  if (req.body.acceptedFriendId == null) {
+    res.sendStatus(400);
+  }
+  console.log(req.body.acceptedFriendId)
 
   try {
-    const updatedFriendLists = await res.friendLists.save();
-    res.json(updatedFriendLists);
+    // remove friend request
+    await FriendLists.updateOne(
+      { id: req.userId },
+      { $pull: { friendRequests: req.body.acceptedFriendId } }
+    );
+    // add you in me
+    await FriendLists.updateOne(
+      { id: req.userId },
+      { $addToSet: { friendList: req.body.acceptedFriendId } }
+    );
+    // add me in you
+    await FriendLists.updateOne(
+      { id: req.body.acceptedFriendId },
+      { $addToSet: { friendList: req.userId } }
+    );
+
+    res.sendStatus(200);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err });
   }
 });
 
-router.patch('/', getFriendLists, async (req: any, res: any) => {
-  if (req.body.friendList != null) {
-    res.friendLists.friendList = req.body.friendList;
-  }
-
-  if (req.body.friendRequests != null) {
-    res.friendLists.friendRequests = req.body.friendRequests;
+// add validation?
+router.post('/declineFriendRequest', async (req: any, res: any) => {
+  if (req.body.declinedFriendId == null) {
+    res.sendStatus(400);
   }
 
   try {
-    const updatedFriendList = await res.friendLists.save();
-    res.json(updatedFriendList);
+    await FriendLists.updateOne(
+      { id: req.userId },
+      { $pull: { friendRequests: req.body.addedFriendId } }
+    );
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err });
   }
 });
 
-router.delete('/', getFriendLists, async (req: any, res: any) => {
+// add validation?
+router.delete('/removeFriendship', getFriends, async (req: any, res: any) => {
+  if (req.body.removedFriendId == null) {
+    res.sendStatus(400);
+  }
+
   try {
-    await res.friendLists.remove();
-    res.json({ error: 'Deleted friendList' });
+    await FriendLists.updateOne(
+      { id: req.userId },
+      { $pull: { friendList: req.body.removedFriendId } }
+    );
+    await FriendLists.updateOne(
+      { id: req.body.removedFriendId },
+      { $pull: { friendList: req.userId } }
+    );
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ message: err });
   }
 });
 
-async function getFriendLists(req: any, res: any, next: any) {
+async function getFriends(req: any, res: any, next: any) {
   try {
-    const friendLists = await FriendLists.findOne({ id: req.userId });
-    if (friendLists == null) {
+    const query = await FriendLists.findOne(
+      { id: req.userId },
+      { friendList: 1, _id: 0 }
+    );
+    if (query == null) {
       return res
         .status(404)
-        .json({ error: `Cant find friend lists for ${req.userId}` });
+        .json({ error: `Cant find friend list for ${req.userId}` });
     }
 
-    res.friendLists = friendLists;
+    res.friendList = query.friendList;
+    next();
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+async function getFriendRequests(req: any, res: any, next: any) {
+  try {
+    const query = await FriendLists.findOne(
+      { id: req.userId },
+      { friendRequests: 1, _id: 0 }
+    );
+    if (query == null) {
+      return res
+        .status(404)
+        .json({ error: `Cant find friend requests for ${req.userId}` });
+    }
+
+    res.friendRequests = query.friendRequests;
     next();
   } catch (err) {
     return res.status(500).json({ error: err.message });

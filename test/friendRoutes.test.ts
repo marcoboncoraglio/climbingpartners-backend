@@ -1,11 +1,11 @@
 import app from '../src/index';
 import supertest from 'supertest';
-import { getIdFromToken } from '../src/utils/jwtUtils';
 
 let _id: string;
 const contentType: string = 'application/json; charset=utf-8';
 let token: any;
 
+// todo: add tests for new friends api
 describe('Testing friendList API', () => {
   beforeAll((done) => {
     supertest(app)
@@ -27,7 +27,7 @@ describe('Testing friendList API', () => {
       });
   });
 
-  it('Post friendList', (done) => {
+  it('Send friend request', (done) => {
     supertest(app)
       .post('/api/friendLists')
       .send({
@@ -47,7 +47,7 @@ describe('Testing friendList API', () => {
       });
   });
 
-  it('Get friendList by id', (done) => {
+  it('Accept friend request', (done) => {
     supertest(app)
       .get(`/api/friendLists/`)
       .expect('Content-Type', contentType)
@@ -62,7 +62,7 @@ describe('Testing friendList API', () => {
       });
   });
 
-  it('Put friendList', (done) => {
+  it('Deny friend request', (done) => {
     const newFriendsLists = {
       friendList: [1, 2, 3],
       friendRequests: [1, 2],
@@ -109,22 +109,6 @@ describe('Testing friendList API', () => {
           throw err;
         }
         expect(res.body.friendList).toEqual(newFriendList.map(String));
-        done();
-      });
-  });
-
-  it('Delete friendList', (done) => {
-    supertest(app)
-      .delete(`/api/friendLists/`)
-      .set('Content-Type', contentType)
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200)
-      .end((err: any, res: any) => {
-        if (err) {
-          throw err;
-        }
-        expect(res.body.error).toBe('Deleted friendList');
         done();
       });
   });
