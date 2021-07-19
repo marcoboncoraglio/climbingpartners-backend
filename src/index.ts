@@ -51,6 +51,7 @@ function authenticateToken(req: any, res: any, next: any) {
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401); // if there isn't any token
 
+  // TODO: jwt malformed for google login
   jwt.verify(
     token,
     process.env.TOKEN_SECRET as string,
@@ -65,9 +66,11 @@ function authenticateToken(req: any, res: any, next: any) {
   );
 }
 
+const openPaths = ['/api/auth/login', '/api/auth/register', '/api/auth/google', '/api/auth/google/redirect'];
+
 if (PROTECT_ROUTES || IN_PROD) {
   app.all('*', (req, res, next) => {
-    if (req.path === '/api/auth/login' || req.path === '/api/auth/register') {
+    if (openPaths.some((path) => path === req.path)) {
       next();
     } else {
       authenticateToken(req, res, next);

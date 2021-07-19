@@ -1,18 +1,29 @@
-import mongoose, {Schema, Document, PassportLocalSchema } from 'mongoose';
+import mongoose, { Schema, Document, PassportLocalSchema } from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
 
-
 export interface IUserLoginInterface extends Document {
-    username: string;
+  username: string;
+  googleId: number;
 }
 
-const userLoginSchema: Schema = new Schema({
-    username: {
-        type: String,
-    },
+let userLoginSchema: Schema = new Schema({
+  username: {
+    type: String,
+  },
+  googleId: {
+    type: Number,
+  },
 });
 
 userLoginSchema.plugin(passportLocalMongoose);
 
-export default mongoose.model<IUserLoginInterface>('userLogin',
-userLoginSchema as PassportLocalSchema);
+declare global {
+  namespace Express {
+      interface User extends IUserLoginInterface {}
+  }
+}
+
+export default mongoose.model<IUserLoginInterface>(
+  'userLogin',
+  userLoginSchema as PassportLocalSchema
+);

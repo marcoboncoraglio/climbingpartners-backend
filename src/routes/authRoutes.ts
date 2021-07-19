@@ -76,15 +76,28 @@ router.post('/login', (req: any, res: any) => {
   })(req, res);
 });
 
-/*
-router.get('/google',
-    passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile'],
+  })
+);
 
-router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-        res.redirect('/');
+router.get(
+  '/google/redirect',
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: '/login',
+  }),
+  async (req, res) => {
+    const token = jwt.sign({ id: req.user }, process.env.TOKEN_SECRET, {
+      expiresIn: process.env.TOKEN_EXPIRATION_TIME,
     });
-*/
+
+    res.redirect(
+      `http://localhost:3000/login/google/redirect?id=${req.user?._id}&token=${token}`
+    );
+  }
+);
 
 export default router;
