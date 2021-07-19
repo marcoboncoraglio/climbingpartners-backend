@@ -1,6 +1,5 @@
 import app from '../src/index';
 import supertest from 'supertest';
-import { getIdFromToken } from '../src/utils/jwtUtils';
 
 describe('Testing userCards API', () => {
   let _id: string;

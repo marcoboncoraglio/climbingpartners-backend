@@ -89,6 +89,6 @@ import locationsRouter from './routes/locationRoutes';
 app.use('/api/locations', locationsRouter);
 
 import friendListsRouter from './routes/friendListsRoutes';
-app.use('/api/friendLists', friendListsRouter);
+app.use('/api/friends', friendListsRouter);
 
 export default app;

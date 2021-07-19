@@ -1,9 +1,13 @@
 import app from '../src/index';
 import supertest from 'supertest';
 import UserLogin from '../src/models/userLogin';
-const jwt = require('jsonwebtoken');
+
+
 
 describe('Testing authentication API: local strategy', () => {
+  let user = "aasdfasdfa1";
+  let pw = "hello";
+
   let _id: string;
   let token: string;
   const contentType: string = 'application/json; charset=utf-8';
@@ -12,8 +16,8 @@ describe('Testing authentication API: local strategy', () => {
     supertest(app)
       .post('/api/auth/register')
       .send({
-        username: 'testobject101',
-        password: 'hi',
+        username: user,
+        password: pw,
       })
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
@@ -33,8 +37,8 @@ describe('Testing authentication API: local strategy', () => {
     supertest(app)
       .post('/api/auth/login')
       .send({
-        username: 'testobject101',
-        password: 'hi',
+        username: user,
+        password: pw,
       })
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')

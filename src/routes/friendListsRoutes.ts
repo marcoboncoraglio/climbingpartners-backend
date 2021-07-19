@@ -37,7 +37,6 @@ router.post('/acceptFriendRequest', async (req: any, res: any) => {
   if (req.body.acceptedFriendId == null) {
     res.sendStatus(400);
   }
-  console.log(req.body.acceptedFriendId)
 
   try {
     // remove friend request
@@ -71,11 +70,15 @@ router.post('/declineFriendRequest', async (req: any, res: any) => {
   try {
     await FriendLists.updateOne(
       { id: req.userId },
-      { $pull: { friendRequests: req.body.addedFriendId } }
+      { $pull: { friendRequests: req.body.declinedFriendId } }
     );
+
+    res.sendStatus(200);
+
   } catch (err) {
     res.status(400).json({ message: err });
   }
+
 });
 
 // add validation?
@@ -93,6 +96,9 @@ router.delete('/removeFriendship', getFriends, async (req: any, res: any) => {
       { id: req.body.removedFriendId },
       { $pull: { friendList: req.userId } }
     );
+
+    res.sendStatus(200);
+
   } catch (err) {
     res.status(400).json({ message: err });
   }
@@ -100,10 +106,7 @@ router.delete('/removeFriendship', getFriends, async (req: any, res: any) => {
 
 async function getFriends(req: any, res: any, next: any) {
   try {
-    const query = await FriendLists.findOne(
-      { id: req.userId },
-      { friendList: 1, _id: 0 }
-    );
+    const query = await FriendLists.findOne({ id: req.userId });
     if (query == null) {
       return res
         .status(404)
@@ -119,10 +122,7 @@ async function getFriends(req: any, res: any, next: any) {
 
 async function getFriendRequests(req: any, res: any, next: any) {
   try {
-    const query = await FriendLists.findOne(
-      { id: req.userId },
-      { friendRequests: 1, _id: 0 }
-    );
+    const query = await FriendLists.findOne({ id: req.userId });
     if (query == null) {
       return res
         .status(404)

@@ -5,7 +5,6 @@ let _id: string;
 const contentType: string = 'application/json; charset=utf-8';
 let token: any;
 
-// todo: add tests for new friends api
 describe('Testing friendList API', () => {
   beforeAll((done) => {
     supertest(app)
@@ -29,15 +28,14 @@ describe('Testing friendList API', () => {
 
   it('Send friend request', (done) => {
     supertest(app)
-      .post('/api/friendLists')
+      .post('/api/friends/sendFriendRequest')
       .send({
-        friendList: [1, 2],
-        friendRequests: [1],
+        addedFriendId: '60f564ca494cd40ce031b72b',
       })
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
-      .expect(201)
+      .expect(200)
       .end((err: any, res: any) => {
         if (err) {
           throw err;
@@ -49,8 +47,12 @@ describe('Testing friendList API', () => {
 
   it('Accept friend request', (done) => {
     supertest(app)
-      .get(`/api/friendLists/`)
-      .expect('Content-Type', contentType)
+      .post(`/api/friends/acceptFriendRequest`)
+      .send({
+        acceptedFriendId: '60f564ca494cd40ce031b72b'
+      })
+      .set('Content-Type', contentType)
+      .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .end((err: any, res: any) => {
@@ -63,16 +65,10 @@ describe('Testing friendList API', () => {
   });
 
   it('Deny friend request', (done) => {
-    const newFriendsLists = {
-      friendList: [1, 2, 3],
-      friendRequests: [1, 2],
-    };
-
     supertest(app)
-      .put(`/api/friendLists/`)
+      .post(`/api/friends/declineFriendRequest`)
       .send({
-        friendList: newFriendsLists.friendList,
-        friendRequests: newFriendsLists.friendRequests,
+        declinedFriendId: '60f564ca494cd40ce031b72b',
       })
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
@@ -82,23 +78,16 @@ describe('Testing friendList API', () => {
         if (err) {
           throw err;
         }
-        expect(res.body.friendList).toEqual(
-          newFriendsLists.friendList.map(String)
-        );
-
-        expect(res.body.friendRequests).toEqual(
-          newFriendsLists.friendRequests.map(String)
-        );
         done();
       });
   });
 
-  it('Patch friendList', (done) => {
-    const newFriendList = [1, 2];
+  
+  it('Remove friend', (done) => {
     supertest(app)
-      .patch(`/api/friendLists/`)
+      .delete(`/api/friends/removeFriendship`)
       .send({
-        friendList: newFriendList,
+        removedFriendId: '5fa742a8e2a5c12bf0b67278',
       })
       .set('Content-Type', contentType)
       .set('Accept', 'application/json')
@@ -108,8 +97,8 @@ describe('Testing friendList API', () => {
         if (err) {
           throw err;
         }
-        expect(res.body.friendList).toEqual(newFriendList.map(String));
         done();
       });
   });
+
 });

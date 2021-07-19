@@ -1,20 +1,40 @@
-GET http://localhost:4000/api/friendLists/
+GET http://localhost:4000/api/friends/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmE2ZmIwOGI0YjU1ZDhlMWQ3ZmU3NjUiLCJpYXQiOjE2MDQ3Nzg3NjEsImV4cCI6MTYwNTAzNzk2MX0.7Uq3nQxdbMcYC85-TsJT1wyPQIhfOXTAoT64bjp7Sls
 ###
 
-GET http://localhost:4000/api/friendLists/123412341234
+GET http://localhost:4000/api/friends/123412341234
 
 ###
 
-GET http://localhost:4000/api/friendLists/5d812aa136091e6a2229b31a
+GET http://localhost:4000/api/friends/5d812aa136091e6a2229b31a
 
 ###
 
-POST http://localhost:4000/api/friendLists
+POST http://localhost:4000/api/friends
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmE2ZmQ0NjRmMGY0YzllMGVhMjJiYWEiLCJpYXQiOjE2MDQ3Nzk2MzIsImV4cCI6MTYwNTAzODgzMn0.mP6UYbyX7a47u6N9tjCrCNZw2Dt-4bLE-LV5ORus8pw
 content-type: application/json
 
 {
     "friendList": [1,2],
     "friendRequests": [1]
+}
+
+###
+
+POST http://localhost:4000/api/friends/sendFriendRequest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYTc0MmIxZTJhNWMxMmJmMGI2NzI3ZCIsImlhdCI6MTYyNjY5NzQ3MCwiZXhwIjoxNjI2OTU2NjcwfQ.pryBlwCODx5jJS2DahOCUobqRevnmi5gaNxCgVBDdHM
+content-type: application/json
+
+{
+    "addedFriendId": "60f564ca494cd40ce031b72b"
+}
+
+###
+
+POST http://localhost:4000/api/friends/declineFriendRequest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmYTc0MmIxZTJhNWMxMmJmMGI2NzI3ZCIsImlhdCI6MTYyNjY5NzQ3MCwiZXhwIjoxNjI2OTU2NjcwfQ.pryBlwCODx5jJS2DahOCUobqRevnmi5gaNxCgVBDdHM
+content-type: application/json
+
+{
+    "declinedFriendId": "60f56f15cedb8188fc4787a6"
 }
