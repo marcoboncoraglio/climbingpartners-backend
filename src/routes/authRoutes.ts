@@ -25,6 +25,7 @@ router.post('/register', (req: any, res: any, next: any) => {
 
       const userCard = new UserCard({
         id: user._id,
+        name: user.username,
       });
 
       const userDetails = new UserDetails({

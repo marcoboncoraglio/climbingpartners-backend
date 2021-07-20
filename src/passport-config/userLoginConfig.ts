@@ -55,6 +55,8 @@ function loadGoogleLoginConfig(passport: any) {
 
                 const userCard = new UserCard({
                   id: newUser._id,
+                  name: newUser.username,
+                  imgUrl: profile._json.picture,
                 });
 
                 const userDetails = new UserDetails({
